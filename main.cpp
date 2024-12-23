@@ -3,19 +3,25 @@
 #include "environment.h"
 #include "satellite.h"
 
+#define MASS_EARTH 5.972e24
+
 int main(){
     //deine the environment
-    Environment env(5.972e24, Vector3D(0, 0, 0), 1.225);
+    Environment GEO(MASS_EARTH, Vector3D(0, 0, 0), 0);
 
     //define the satellite
-    Satellite gsat11(47000, Vector3D(0, 0, 6378), Vector3D(0, 7.5, 0), Vector3D(0, 0, 0));
+    Satellite gsat11(47000, Vector3D(7313.7, 41525.1, 0), Vector3D(-3.04, 0.535, 0), Vector3D(0, 0, 0), GEO);
 
     double timeStep = 1.0; // 1 second
     for (int i = 0; i < 10; ++i) {
+        if(i%2 == 0){
+            std::cout << "Time: " << (i) * timeStep 
+                      << "s, Position: " << gsat11.position.magnitude() << ", "
+                      << "Orbital Velocity: " << gsat11.computeOrbitalVelocity().magnitude() << ", "
+                      << "Velocity: " << gsat11.velocity.magnitude() << ", "
+                      << "At Orbital Velocity: " << (gsat11.atOrbitalVelocity() ? "Yes" : "No")<< std::endl;
+        }
         gsat11.update(timeStep);
-        std::cout << "Time: " << (i + 1) * timeStep 
-                  << "s, Position: (" << gsat11.position.x << ", "
-                  << gsat11.position.y << ", " << gsat11.position.z << ")\n";
     }
 
     return 0;

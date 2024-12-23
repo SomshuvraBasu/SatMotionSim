@@ -2,6 +2,8 @@
 #pragma once // Include guard
 #include <cmath>
 
+const double tolerance = 1e-6;
+
 class Vector3D {
 public:
     double x, y, z;
@@ -23,6 +25,20 @@ public:
     // Overload multiplication for vectors
     Vector3D operator*(double scalar) const {
         return Vector3D(x * scalar, y * scalar, z * scalar);
+    }
+
+    // equality withing a tolerance of vector
+    bool operator==(const Vector3D& other) const {
+        return std::abs(x - other.x) < tolerance && std::abs(y - other.y) < tolerance && std::abs(z - other.z) < tolerance;
+    }
+
+    // Cross product function
+    Vector3D cross(const Vector3D& other) const {
+        return Vector3D(
+            y * other.z - z * other.y, // x-component
+            z * other.x - x * other.z, // y-component
+            x * other.y - y * other.x  // z-component
+        );
     }
 
     // Magnitude of the vector
