@@ -24,5 +24,11 @@ file(GLOB SOURCES_CORE
 # Combine all the source files into one list
 list(APPEND SOURCES ${SOURCES_COMMON} ${SOURCES_CORE})
 
+#link to the GLFW library
+find_package(glfw3 3.3 REQUIRED)
+
 # Create the executable
 add_executable(SatelliteExample ${SOURCES})
+
+# Link the GLFW library with your project
+target_link_libraries(SatelliteExample PRIVATE glfw)
