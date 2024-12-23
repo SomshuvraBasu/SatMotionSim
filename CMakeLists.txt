@@ -32,3 +32,7 @@ add_executable(SatelliteExample ${SOURCES})
 
 # Link the GLFW library with your project
 target_link_libraries(SatelliteExample PRIVATE glfw)
+
+#link glew
+find_package(GLEW REQUIRED)
+target_link_libraries(SatelliteExample PRIVATE GLEW::GLEW)
