@@ -34,8 +34,7 @@ public:
         double v = velocity.magnitude();
         double centripetal_acceleration = v * v / r;
         Vector3D centripetal_acceleration_vector = position * (-centripetal_acceleration / r);
-        Vector3D centripetal_acceleration_kmpss = centripetal_acceleration_vector * 1e-3; // Convert to km/s^2
-        return centripetal_acceleration_kmpss;
+        return centripetal_acceleration_vector;
     }
 
     bool atOrbitalVelocity() {
@@ -45,14 +44,15 @@ public:
     }
     
     Vector3D computeAcceleration(const Vector3D& thrust) {
-        Vector3D acceleration = (thrust * (1/mass));
+        Vector3D centripetal_acceleration = computeCentripetalAcceleration();
+        Vector3D acceleration = (thrust * (1/mass)) + centripetal_acceleration; 
         return acceleration;
     }
 
     void update(const double& dt) {
-        // Vector3D acceleration = computeAcceleration(thrust);
-        // velocity = velocity + acceleration * dt;
-        // position = position + velocity * dt;
+        Vector3D acceleration = computeAcceleration(thrust);
+        velocity = velocity + acceleration * dt;
+        position = position + velocity * dt;
     }
 
 };

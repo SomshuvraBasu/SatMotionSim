@@ -2,7 +2,7 @@
 #pragma once // Include guard
 #include <cmath>
 
-const double tolerance = 1e-6;
+const double tolerance = 1e-3;
 
 class Vector3D {
 public:
