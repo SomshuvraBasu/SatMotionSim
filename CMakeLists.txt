@@ -28,11 +28,15 @@ list(APPEND SOURCES ${SOURCES_COMMON} ${SOURCES_CORE})
 find_package(glfw3 3.3 REQUIRED)
 
 # Create the executable
-add_executable(SatelliteExample ${SOURCES})
+add_executable(SatMotionSim ${SOURCES})
 
 # Link the GLFW library with your project
-target_link_libraries(SatelliteExample PRIVATE glfw)
+target_link_libraries(SatMotionSim PRIVATE glfw)
 
 #link glew
 find_package(GLEW REQUIRED)
-target_link_libraries(SatelliteExample PRIVATE GLEW::GLEW)
+target_link_libraries(SatMotionSim PRIVATE GLEW::GLEW)
+
+#link opengl
+find_package(OpenGL REQUIRED)
+target_link_libraries(SatMotionSim PRIVATE OpenGL::GL)
