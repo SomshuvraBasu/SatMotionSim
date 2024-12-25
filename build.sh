@@ -1,7 +1,7 @@
 echo "Initializing build process"
 
-BUILD_DIR="/Users/som/Projects/SatMotionSim/build/dev"
-CMAKE_FILE="/Users/som/Projects/SatMotionSim/CMakeLists.txt"
+BUILD_DIR=$(pwd)/build/dev #output of pwd command is inserted into the variable BUILD_DIR
+CMAKE_FILE=$(pwd)/CMakeLists.txt
 TIMESTAMP_FILE="$BUILD_DIR/.cmake_timestamp"
 
 if [ ! -d "$BUILD_DIR" ]; then
@@ -18,7 +18,7 @@ if [ ! -f "$TIMESTAMP_FILE" ] || [ "$CMAKE_FILE" -nt "$TIMESTAMP_FILE" ]; then
     rm -rf "$BUILD_DIR/*"
     echo "CMakeLists.txt has changed or no previous build timestamp found."
     echo "Cleaning DIR and Running cmake"
-    cmake /Users/som/Projects/SatMotionSim
+    cmake $(pwd)
     touch "$TIMESTAMP_FILE"
 else
     echo "CMakeLists.txt has not changed. Skipping cmake"
