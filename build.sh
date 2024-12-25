@@ -28,4 +28,13 @@ echo "Running make"
 make
 echo "Build complete"
 echo "====================================================="
-./SatMotionSim
+echo "Executable: $BUILD_DIR/SatMotionSim"
+echo "====================================================="
+$BUILD_DIR/SatMotionSim
+#if the executable is not found, the script will exit with an error code of 1
+if [ $? -ne 0 ]; then
+    echo "Executable not found. Error in build process."
+    exit 1
+fi
+echo "====================================================="
+echo "Done"
