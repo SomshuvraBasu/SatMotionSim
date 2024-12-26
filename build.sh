@@ -2,7 +2,6 @@ echo "Initialising build process"
 
 BUILD_DIR=$(pwd)/build/dev #output of pwd command is inserted into the variable BUILD_DIR
 CMAKE_FILE=$(pwd)/CMakeLists.txt
-TIMESTAMP_FILE="$BUILD_DIR/.cmake_timestamp"
 
 if [ ! -d "$BUILD_DIR" ]; then
     mkdir -p "$BUILD_DIR"
@@ -11,16 +10,10 @@ fi
 echo "Build directory: $BUILD_DIR"
 echo "====================================================="
 
-# Check if the CMakeLists.txt file has changed
-if [ ! -f "$TIMESTAMP_FILE" ] || [ "$CMAKE_FILE" -nt "$TIMESTAMP_FILE" ]; then
-    rm -rf "$BUILD_DIR/*"
-    echo "CMakeLists.txt has changed or no previous build timestamp found."
-    echo "Cleaning DIR and Running cmake"
-    cmake -S $(pwd) -B "$BUILD_DIR"
-    touch "$TIMESTAMP_FILE"
-else
-    echo "CMakeLists.txt has not changed. Skipping cmake"
-fi
+rm -rf "$BUILD_DIR/*"
+echo "Cleaning DIR and Running cmake"
+cmake -S $(pwd) -B "$BUILD_DIR"
+
 echo "====================================================="
 echo "Running make"
 make -C "$BUILD_DIR"
