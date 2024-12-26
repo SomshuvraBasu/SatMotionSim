@@ -1,5 +1,5 @@
 #pragma once
-#define GL_SILENCE_DEPRECATION
+#define GL_SILENCE_DEPRECATION 
 #include <vector>
 #include <GLFW/glfw3.h>
 #include "vector3D.h"
