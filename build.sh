@@ -1,4 +1,4 @@
-echo "Initializing build process"
+echo "Initialising build process"
 
 BUILD_DIR=$(pwd)/build/dev #output of pwd command is inserted into the variable BUILD_DIR
 CMAKE_FILE=$(pwd)/CMakeLists.txt
@@ -8,8 +8,6 @@ if [ ! -d "$BUILD_DIR" ]; then
     mkdir -p "$BUILD_DIR"
 fi
 
-cd "$BUILD_DIR"
-
 echo "Build directory: $BUILD_DIR"
 echo "====================================================="
 
@@ -18,14 +16,14 @@ if [ ! -f "$TIMESTAMP_FILE" ] || [ "$CMAKE_FILE" -nt "$TIMESTAMP_FILE" ]; then
     rm -rf "$BUILD_DIR/*"
     echo "CMakeLists.txt has changed or no previous build timestamp found."
     echo "Cleaning DIR and Running cmake"
-    cmake $(pwd)
+    cmake -S $(pwd) -B "$BUILD_DIR"
     touch "$TIMESTAMP_FILE"
 else
     echo "CMakeLists.txt has not changed. Skipping cmake"
 fi
 echo "====================================================="
 echo "Running make"
-make
+make -C "$BUILD_DIR"
 echo "Build complete"
 echo "====================================================="
 echo "Executable: $BUILD_DIR/SatMotionSim"
