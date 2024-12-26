@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_set>
 #include "vector3D.h"
+#include "helpers.h"
 #include "environment.h"
 #include "satellite.h"
 #include "render.h"
@@ -11,6 +12,11 @@
 #define SPEEDUP_FACTOR 1
 
 int main() {
+
+    // Get refresh rate of the primary monitor
+    int refreshRate = RefreshRateHelper().getRefreshRate();
+    std::cout<<"Refresh rate: "<<refreshRate<<std::endl;
+
     // Initialize OpenGL
     GLFWwindow* window = initOpenGL();
     if (!window) return -1;
@@ -19,7 +25,7 @@ int main() {
     Environment GEO(MASS_EARTH, Vector3D(0, 0, 0), 0);
     Satellite gsat11(47000, Vector3D(7313.7, 41525.1, 0), Vector3D(-3.04*SPEEDUP_FACTOR, 0.535*SPEEDUP_FACTOR, 0*SPEEDUP_FACTOR), Vector3D(0, 0, 0), GEO);
 
-    double timeStep = 1.0; // 1 second
+    double timeStep = 1.0/refreshRate; // 1 second per total refreshRate frames
     std::unordered_set<Vector3D> uniquePositions;
     std::vector<Vector3D> onscreenOrbit;
 
