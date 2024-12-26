@@ -1,4 +1,5 @@
-echo "Running executable"
+echo "Initialising Executable"
+echo "====================================================="
 EXECUTABLE=$(pwd)/build/dev/SatMotionSim
 if [ ! -f "$EXECUTABLE" ]; then
     echo "Executable not found. Run build.sh first."

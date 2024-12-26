@@ -1,6 +1,7 @@
 // Vector3D.h
 #pragma once
 #include <cmath>
+#include <functional>
 
 const double tolerance = 1e-3;
 
@@ -24,3 +25,19 @@ public:
     // Magnitude of the vector
     double magnitude() const;
 };
+
+//Hash function for unordered_set
+namespace std {
+    template<>
+    struct hash<Vector3D> {
+        size_t operator()(const Vector3D& v) const {
+            // Hash each component (x, y, z) and combine them using XOR and bit shifts
+            size_t h1 = hash<double>()(v.x);
+            size_t h2 = hash<double>()(v.y);
+            size_t h3 = hash<double>()(v.z);
+
+            // Combine the hashes using XOR with shifts for better distribution
+            return h1 ^ (h2 << 1) ^ (h3 << 2);  // Using shifts to ensure better spreading of the bits
+        }
+    };
+}
