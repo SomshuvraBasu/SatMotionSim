@@ -38,3 +38,12 @@ int RefreshRateHelper::getRefreshRate() {
 
     return mode->refreshRate;
 }
+
+// Map position to Normalized Device Coordinates (NDC)
+Vector3D getNDC(const Vector3D& position, double maxRange) {
+    return Vector3D(
+        position.x / maxRange,  // Normalize x
+        position.y / maxRange,  // Normalize y
+        position.z / maxRange   // Normalize z
+    );
+}

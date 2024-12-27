@@ -23,3 +23,6 @@ public:
 private:
     bool m_initialized;        // Flag to check if GLFW is initialized
 };
+
+// Map position to Normalized Device Coordinates (NDC)
+Vector3D getNDC(const Vector3D& position, double maxRange);

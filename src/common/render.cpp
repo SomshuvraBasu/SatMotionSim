@@ -19,15 +19,6 @@ GLFWwindow* initOpenGL() {
     return window;
 }
 
-// Map position to Normalized Device Coordinates (NDC)
-Vector3D mapToNDC(const Vector3D& position, double maxRange) {
-    return Vector3D(
-        position.x / maxRange,  // Normalize x
-        position.y / maxRange,  // Normalize y
-        position.z / maxRange   // Normalize z
-    );
-}
-
 void renderSatellites(const std::vector<SatelliteData>& satellites) {
     for (const auto& satData : satellites) {
         // Render each satellite's orbit
@@ -37,7 +28,7 @@ void renderSatellites(const std::vector<SatelliteData>& satellites) {
             glVertex3f(point.x, point.y, point.z);
         }
         glEnd();
-        
+
         // Render the satellite as a red point
         glPointSize(5.0f);
         glBegin(GL_POINTS);

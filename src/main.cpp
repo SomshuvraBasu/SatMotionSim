@@ -40,7 +40,7 @@ int main() {
             satData.satellite.update(timeStep);
 
             // Map satellite position to NDC
-            Vector3D satOnscreenCurrPosition = mapToNDC(satData.satellite.position, MAX_RANGE);
+            Vector3D satOnscreenCurrPosition = getNDC(satData.satellite.position, MAX_RANGE);
 
             // Update orbit if position is unique
             if (std::find(satData.orbit.begin(), satData.orbit.end(), satOnscreenCurrPosition) == satData.orbit.end()) {
