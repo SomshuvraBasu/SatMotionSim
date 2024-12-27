@@ -24,7 +24,7 @@ Vector3D mapToNDC(const Vector3D& position, double maxRange) {
     return Vector3D(
         position.x / maxRange,  // Normalize x
         position.y / maxRange,  // Normalize y
-        0                       // Ignore z for 2D visualization
+        position.z / maxRange   // Normalize z
     );
 }
 
@@ -34,7 +34,7 @@ void renderSatellite(const std::vector<Vector3D>& orbit, const Vector3D& satOnsc
     glBegin(GL_LINE_STRIP);
     glColor3f(0.0f, 1.0f, 0.0f); // Green for orbit
     for (const auto& point : orbit) {
-        glVertex2f(point.x, point.y);
+        glVertex3f(point.x, point.y, point.z);
     }
     glEnd();
 
@@ -44,7 +44,7 @@ void renderSatellite(const std::vector<Vector3D>& orbit, const Vector3D& satOnsc
     glColor3f(1.0f, 0.0f, 0.0f); // Red for satellite
     if (!orbit.empty()) {
         const auto& last = satOnscreenCurrPosition;
-        glVertex2f(last.x, last.y);
+        glVertex3f(last.x, last.y, last.z);
     }
     glEnd();
 }
