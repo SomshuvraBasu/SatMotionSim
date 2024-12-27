@@ -28,23 +28,24 @@ Vector3D mapToNDC(const Vector3D& position, double maxRange) {
     );
 }
 
-// Render the satellite and its orbit
-void renderSatellite(const std::vector<Vector3D>& orbit, const Vector3D& satOnscreenCurrPosition) {
-    // Draw orbit as a line strip
-    glBegin(GL_LINE_STRIP);
-    glColor3f(0.0f, 1.0f, 0.0f); // Green for orbit
-    for (const auto& point : orbit) {
-        glVertex3f(point.x, point.y, point.z);
+void renderSatellites(const std::vector<SatelliteData>& satellites) {
+    for (const auto& satData : satellites) {
+        // Render each satellite's orbit
+        glBegin(GL_LINE_STRIP);
+        glColor3f(0.0f, 1.0f, 0.0f); // Green for orbit
+        for (const auto& point : satData.orbit) {
+            glVertex3f(point.x, point.y, point.z);
+        }
+        glEnd();
+        
+        // Render the satellite as a red point
+        glPointSize(5.0f);
+        glBegin(GL_POINTS);
+        glColor3f(1.0f, 0.0f, 0.0f); // Red for satellite
+        if (!satData.orbit.empty()) {
+            const auto& last = satData.orbit.back();
+            glVertex3f(last.x, last.y, last.z);
+        }
+        glEnd();
     }
-    glEnd();
-
-    // Draw satellite as a red point
-    glPointSize(5.0f);
-    glBegin(GL_POINTS);
-    glColor3f(1.0f, 0.0f, 0.0f); // Red for satellite
-    if (!orbit.empty()) {
-        const auto& last = satOnscreenCurrPosition;
-        glVertex3f(last.x, last.y, last.z);
-    }
-    glEnd();
 }

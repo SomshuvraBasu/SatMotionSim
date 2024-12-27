@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <unordered_set>
 #include "vector3D.h"
 #include "helpers.h"
 #include "environment.h"
@@ -12,7 +11,6 @@
 #define SPEEDUP_FACTOR 1000
 
 int main() {
-
     // Get refresh rate of the primary monitor
     int refreshRate = RefreshRateHelper().getRefreshRate();
     std::cout<<"Refresh rate: "<<refreshRate<<std::endl;
@@ -21,30 +19,37 @@ int main() {
     GLFWwindow* window = initOpenGL();
     if (!window) return -1;
 
-    // Define environment and satellite
+    // Define environment
     Environment GEO(MASS_EARTH, Vector3D(0, 0, 0), 0);
-    Satellite gsat11(47000, Vector3D(7313.7, 41525.1, 500), Vector3D(-3.04*SPEEDUP_FACTOR, 0.535*SPEEDUP_FACTOR, 0*SPEEDUP_FACTOR), Vector3D(0, 0, 0), GEO);
 
-    double timeStep = 1.0/refreshRate; // 1 second per total refreshRate frames
-    std::unordered_set<Vector3D> uniquePositions;
-    std::vector<Vector3D> onscreenOrbit;
+    // Define tracked satellites
+    std::vector<SatelliteData> trackedSatellites = {
+        {1101, "GSAT11", Satellite(47000, Vector3D(7313.7, 41525.1, 500), Vector3D(-3.04 * SPEEDUP_FACTOR, 0.535 * SPEEDUP_FACTOR, 0), Vector3D(0, 0, 0), GEO), {}},
+        {1201, "GSAT10", Satellite(40000, Vector3D(7313.7, 42000.0, 0), Vector3D(3.04 * SPEEDUP_FACTOR, 0.535 * SPEEDUP_FACTOR, 0), Vector3D(0, 0, 0), GEO), {}}
+    };
+
+    double timeStep = 1.0 / refreshRate; // 1 second per total refreshRate frames
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {
-        // Update satellite position
-        gsat11.update(timeStep);
+        glClear(GL_COLOR_BUFFER_BIT); // Clear the screen
 
-        // Map satellite position to NDC
-        Vector3D satOnscreenCurrPosition = mapToNDC(gsat11.position, MAX_RANGE);
-        
-        if(uniquePositions.find(satOnscreenCurrPosition) == uniquePositions.end()) {
-            uniquePositions.insert(satOnscreenCurrPosition);
-            onscreenOrbit.push_back(satOnscreenCurrPosition);
+        // Update and map satellite positions
+        for (auto& satData : trackedSatellites) {
+            // Update satellite position
+            satData.satellite.update(timeStep);
+
+            // Map satellite position to NDC
+            Vector3D satOnscreenCurrPosition = mapToNDC(satData.satellite.position, MAX_RANGE);
+
+            // Update orbit if position is unique
+            if (std::find(satData.orbit.begin(), satData.orbit.end(), satOnscreenCurrPosition) == satData.orbit.end()) {
+                satData.orbit.push_back(satOnscreenCurrPosition);
+            }
         }
 
-        // Render the satellite and its onscreenOrbit
-        glClear(GL_COLOR_BUFFER_BIT); // Clear the screen
-        renderSatellite(onscreenOrbit, satOnscreenCurrPosition);
+        // Render all satellites
+        renderSatellites(trackedSatellites);
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);
